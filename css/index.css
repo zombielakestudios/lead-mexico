@@ -316,6 +316,21 @@ img {
     transform: rotate(90deg);
 }
 
+/* Logo vertical en menú mobile */
+.nav-mobile-logo {
+    height: 100px;
+    width: auto;
+    filter: brightness(0) invert(1);
+    opacity: 0;
+    transform: scale(.8);
+    transition: opacity .5s var(--ease), transform .5s var(--ease);
+}
+
+.nav-mobile.active .nav-mobile-logo {
+    opacity: 1;
+    transform: scale(1);
+}
+
 /* ─── BOTONES ───────────────────────────────────────────── */
 .btn {
     display: inline-flex;

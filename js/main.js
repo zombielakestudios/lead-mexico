@@ -118,26 +118,55 @@
         }, { passive: true });
     }
 
-    /* ─── SMOOTH SCROLL ──────────────────────────────────── */
+    /* ─── SMOOTH SCROLL (con soporte para lazy-loaded sections) ── */
+    const SECTION_TO_CONTAINER = {
+        'inicio': 'hero-container',
+        'nosotros': 'nosotros-container',
+        'servicios': 'servicios-container',
+        'equipo': 'equipo-container',
+        'contacto': 'contacto-container'
+    };
+
+    function scrollToTarget(target) {
+        if (!target) return;
+        const navbarHeight = document.querySelector('.navbar')?.offsetHeight || 0;
+        const targetPosition = target.getBoundingClientRect().top + window.scrollY - navbarHeight;
+        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+    }
+
     function initSmoothScroll() {
         document.addEventListener('click', (e) => {
             const link = e.target.closest('a[href^="#"]');
             if (!link) return;
 
             e.preventDefault();
+            closeMobileMenu();
+
             const targetId = link.getAttribute('href').slice(1);
-            const target = document.getElementById(targetId);
+            if (!targetId) return;
 
+            // 1. Buscar el elemento directamente
+            let target = document.getElementById(targetId);
             if (target) {
-                closeMobileMenu();
-                const navbarHeight = document.querySelector('.navbar')?.offsetHeight || 0;
-                const targetPosition = target.offsetTop - navbarHeight;
-
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
+                scrollToTarget(target);
+                return;
             }
+
+            // 2. El módulo aún no se cargó — forzar carga y luego scroll
+            const containerId = SECTION_TO_CONTAINER[targetId];
+            if (!containerId) return;
+
+            const config = MODULES.find(m => m.id === containerId);
+            if (!config) return;
+
+            loadModule(config.id, config.url).then(() => {
+                // Esperar a que el DOM se renderice
+                setTimeout(() => {
+                    target = document.getElementById(targetId);
+                    if (!target) target = document.getElementById(containerId);
+                    scrollToTarget(target);
+                }, 100);
+            });
         });
     }
 
@@ -168,12 +197,8 @@
             });
         }
 
-        // Cerrar al hacer click en un link del menú
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                closeMobileMenu();
-            });
-        });
+        // Los links del menú se manejan en initSmoothScroll
+        // (closeMobileMenu + scroll a la sección)
 
         // Cerrar con Escape
         document.addEventListener('keydown', (e) => {
