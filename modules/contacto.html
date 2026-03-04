@@ -1,0 +1,94 @@
+<!-- ============================================================
+     LEAD MÉXICO — Contacto Module
+     Formulario + Info + Mapa Google Maps
+     ============================================================ -->
+<section class="section contacto-section" id="contacto">
+    <div class="container">
+
+        <!-- Header -->
+        <div class="section-header">
+            <span class="section-label" style="color: var(--accent);">Contacto</span>
+            <h2 class="section-title" style="color: var(--white);">Contáctanos</h2>
+            <p class="section-subtitle" style="color: var(--text-muted);">
+                Estamos listos para ayudarte. Agenda una consulta con nuestros especialistas.
+            </p>
+        </div>
+
+        <div class="contacto-grid">
+
+            <!-- Columna Izquierda: Info + Formulario -->
+            <div>
+                <!-- Info de contacto -->
+                <div style="margin-bottom: var(--space-2xl);">
+                    <div class="info-item">
+                        <span class="material-symbols-outlined info-icon">location_on</span>
+                        <div>
+                            <h4>Dirección</h4>
+                            <p>Av. Cobá Lote 31 y 33, Manzana 13, Número 1 Planta Alta,<br>
+                                Super Manzana 22 Centro, C.P. 77500,<br>
+                                Cancún, Municipio de Benito Juárez, Quintana Roo.</p>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="material-symbols-outlined info-icon">mail</span>
+                        <div>
+                            <h4>Correo Electrónico</h4>
+                            <p>rafael@lead-mexico.com</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulario -->
+                <form id="contact-form" autocomplete="on">
+                    <div class="grid grid-2" style="margin-bottom: var(--space-md);">
+                        <div class="form-group">
+                            <input type="text" class="form-input" name="nombre" placeholder="Nombre completo" required
+                                autocomplete="name" id="contact-name">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-input" name="email" placeholder="Correo electrónico"
+                                required autocomplete="email" id="contact-email">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-2" style="margin-bottom: var(--space-md);">
+                        <div class="form-group">
+                            <input type="tel" class="form-input" name="telefono" placeholder="Teléfono"
+                                autocomplete="tel" id="contact-phone">
+                        </div>
+                        <div class="form-group">
+                            <select class="form-select" name="servicio" id="contact-service">
+                                <option value="" disabled selected>Tipo de servicio</option>
+                                <option value="administrativo">Administrativo</option>
+                                <option value="contable">Contable</option>
+                                <option value="fiscal">Fiscal</option>
+                                <option value="financiero">Financiero</option>
+                                <option value="legal">Legal</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: var(--space-lg);">
+                        <textarea class="form-textarea" name="mensaje" rows="4" placeholder="¿En qué podemos ayudarte?"
+                            required id="contact-message"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%;" id="contact-submit">
+                        Enviar Mensaje
+                    </button>
+                </form>
+            </div>
+
+            <!-- Columna Derecha: Mapa -->
+            <div class="contacto-map">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3721.2!2d-86.8475!3d21.1619!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjHCsDA5JzQyLjgiTiA4NsKwNTAnNTEuMCJX!5e0!3m2!1ses!2smx!4v1709500000000!5m2!1ses!2smx"
+                    allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                    title="Ubicación de LEAD México en Cancún, Quintana Roo">
+                </iframe>
+            </div>
+
+        </div>
+    </div>
+</section>

@@ -1,0 +1,95 @@
+# ============================================================
+# LEAD MÉXICO — .htaccess
+# Seguridad SSL Forzada + Headers de Protección + Performance
+# Arquitectura Apex — Fallo Cero
+# ============================================================
+
+# ─── SSL FORZADO (HTTP → HTTPS) ────────────────────────────
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# Forzar www → sin www (canónico)
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+# ─── SECURITY HEADERS (Nivel Pentágono) ────────────────────
+<IfModule mod_headers.c>
+    # Prevenir clickjacking
+    Header always set X-Frame-Options "SAMEORIGIN"
+
+    # Prevenir MIME-type sniffing
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Protección XSS
+    Header always set X-XSS-Protection "1; mode=block"
+
+    # Referrer Policy
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Permissions Policy
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(self)"
+
+    # HSTS — Forzar HTTPS por 1 año
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+    # Content Security Policy (permisiva para Google Fonts y Maps)
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://maps.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; frame-src https://www.google.com https://maps.google.com; connect-src 'self'"
+</IfModule>
+
+# ─── COMPRESIÓN GZIP ───────────────────────────────────────
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ─── CACHE-CONTROL ─────────────────────────────────────────
+<IfModule mod_expires.c>
+    ExpiresActive On
+
+    # HTML — sin cache (siempre fresco)
+    ExpiresByType text/html "access plus 0 seconds"
+
+    # CSS y JS — 1 mes
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+
+    # Imágenes — 1 año
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+
+    # Fuentes — 1 año
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType font/woff "access plus 1 year"
+</IfModule>
+
+# ─── BLOQUEO DE ACCESO A CARPETAS SENSIBLES ────────────────
+# Proteger carpeta Source/ (documentos originales)
+<IfModule mod_rewrite.c>
+    RewriteRule ^Source/ - [F,L]
+</IfModule>
+
+# Bloquear acceso a archivos ocultos (.git, .env, etc.)
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Bloquear acceso a .htaccess
+<Files .htaccess>
+    Order allow,deny
+    Deny from all
+</Files>
+
+# ─── PÁGINAS DE ERROR PERSONALIZADAS ──────────────────────
+ErrorDocument 404 /index.html
+ErrorDocument 403 /index.html
+
+# ─── CHARSET UTF-8 ────────────────────────────────────────
+AddDefaultCharset UTF-8
