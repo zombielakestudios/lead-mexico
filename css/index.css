@@ -13,6 +13,29 @@
     box-sizing: border-box;
 }
 
+/* ─── CUSTOM SCROLLBAR ──────────────────────────────────── */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--primary);
+    /* Azul oscuro de LEAD */
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    /* Dorado de LEAD */
+    border-radius: var(--radius-full);
+    border: 2px solid var(--primary);
+    /* Margen sutil para que no se vea pegado */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-hover);
+}
+
 /* ─── DESIGN TOKENS (Variables HSL) ─────────────────────── */
 :root {
     --primary: hsl(210, 60%, 11%);
@@ -115,6 +138,30 @@ img {
 
 .section {
     padding-block: var(--space-4xl);
+}
+
+/* Base especial para secciones con Parallax */
+.section-parallax {
+    position: relative;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* Sutil overlay para garantizar contraste sin oscurecer en exceso */
+.section-parallax::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: hsla(216, 33%, 97%, .85);
+    /* Superficie clara ajustada para contraste */
+    z-index: 1;
+}
+
+.section-parallax>* {
+    position: relative;
+    z-index: 2;
 }
 
 .section-header {
@@ -575,7 +622,7 @@ img {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--primary);
+    background: var(--primary) url('../img/hero-bg.png') center/cover no-repeat;
     overflow: hidden;
 }
 
